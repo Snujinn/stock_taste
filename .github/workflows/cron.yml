@@ -1,0 +1,16 @@
+name: Update Prices
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Price Update
+        run: |
+          # Replace with your Vercel Deployment URL
+          # or set VERCEL_URL secret in GitHub Settings > Secrets
+          curl -X GET "${{ secrets.VERCEL_URL }}/api/v1/cron/update-prices"
