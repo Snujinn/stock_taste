@@ -19,15 +19,23 @@ def register(user_in: user_schemas.UserCreate, db: Session = Depends(database.ge
             status_code=400,
             detail="The user with this nickname already exists in the system.",
         )
-    user = User(
-        nickname=user_in.nickname,
-        email=user_in.email,
-        hashed_password=security.get_password_hash(user_in.password),
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+    try:
+        user = User(
+            nickname=user_in.nickname,
+            email=user_in.email,
+            hashed_password=security.get_password_hash(user_in.password),
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+    except Exception as e:
+        print(f"Registration Error: {e}")
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Registration failed: {str(e)}",
+        )
 
 @router.post("/login", response_model=user_schemas.Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)) -> Any:
