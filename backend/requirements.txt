@@ -3,6 +3,7 @@ uvicorn[standard]
 sqlalchemy
 alembic
 psycopg[binary]
+psycopg2-binary
 redis
 httpx
 apscheduler
