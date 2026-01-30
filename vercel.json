@@ -1,0 +1,29 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/app/main.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "frontend/package.json",
+            "use": "@vercel/next"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/v1/(.*)",
+            "dest": "backend/app/main.py"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "frontend/$1"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/v1/cron/update-prices",
+            "schedule": "*/10 * * * *"
+        }
+    ]
+}
